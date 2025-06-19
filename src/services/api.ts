@@ -9,7 +9,7 @@ const api = axios.create({
   baseURL: CONTENT_API,
 })
 
-export const login = async (email: string): Promise<string> => {
+export const authUser = async (email: string): Promise<string> => {
   try {
     const response = await axios.post(TOKEN_API, { email })
     token = response.data.token
