@@ -1,55 +1,76 @@
 <script setup lang="ts">
-import { useContentStore } from '@/stores/contentStore'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-const content = ref<any>(null)
+const router = useRouter()
+
+const content = {
+  id: 3,
+  title: 'Black Clover',
+  subTitle: 'There are many variations of passages',
+  userName: 'Pawan Kumar',
+  logo: 'https://i.pinimg.com/736x/51/a4/bd/51a4bd7a1df81792b78c04635754d153.jpg',
+  thumbNailImage:
+    'https://i0.wp.com/www.kearipan.com/wp-content/uploads/2022/07/black-clover-anime.jpg',
+  mainImage: 'https://upload.wikimedia.org/wikipedia/en/6/69/Black_Clover%2C_volume_1.jpg',
+  text: ` "<html>  \n<head>   \n<title> Black Clover </title>  \n</head>  \n<body>  \n<p>\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.\n</p>\n<p>\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.\n</p>\n<p>\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n</p>\n<p>\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.\n</p>\n</body>    \n</html> "`,
+}
+
 onMounted(() => {
-  content.value = {
-    thumbNailImage: 'https://images8.alphacoders.com/100/thumb-1920-1002974.png',
-    mainImage: 'https://i.pinimg.com/736x/f6/6a/bc/f66abc15b6527003da54a93b90d23b8f.jpg',
-    userName: 'Tushar Saini',
-    subTitle: 'There are many variations of passages',
-    text: "<html>  \n<head>   \n<title> The Tale of naruto Uzumaki</title>  \n</head>  \n<body>  \n<p>\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.\n</p>\n<p>\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.\n</p>\n<p>\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n</p>\n<p>\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.\n</p>\n</body>    \n</html> ",
-    id: 1,
-    logo: 'https://i.pinimg.com/474x/b4/a4/f8/b4a4f823e4cd01b9273d1bc342f7ce98.jpg',
-    title: 'The Tale of naruto Uzumaki',
-  }
-
-  console.log(content.value, 'content')
+  console.log('Content loaded:', content)
 })
+
+const formattedDate = computed(() => {
+  const date = new Date()
+  const options = { weekday: 'long' as const, day: 'numeric' as const, month: 'long' as const }
+  return date.toLocaleDateString('en-US', options)
+})
+
+const userInitials = computed(() => {
+  return content.userName
+    .split(' ')
+    .map((name) => name.charAt(0).toUpperCase())
+    .join('')
+})
+
+const goToDetails = () => {
+  router.push({ name: 'anime-detail', state: content })
+}
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
-    <!-- Header with logo and title -->
-    <div class="flex items-center gap-4 p-4">
-      <img :src="content?.logo" alt="Logo" class="h-10 w-10 rounded-full object-cover" />
-      <h1 class="text-2xl font-bold">{{ content?.title }}</h1>
+  <div>
+    <!-- Top Section with Dynamic Date and Initials -->
+    <div class="flex justify-between items-center px-6 py-4">
+      <div class="text-xs text-gray-500 dark:text-gray-400 uppercase">{{ formattedDate }}</div>
+      <div
+        class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-semibold rounded-full h-8 w-8 flex items-center justify-center"
+      >
+        {{ userInitials }}
+      </div>
     </div>
 
-    <!-- Thumbnail / Hero Banner -->
-    <img
-      :src="content?.thumbNailImage"
-      alt="Thumbnail"
-      class="w-full max-h-60 object-cover rounded-md shadow mb-4"
-    />
+    <!-- Main Content -->
+    <div class="min-h-screen flex justify-center items-center bg-white dark:bg-gray-900 p-4">
+      <div
+        class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition-transform cursor-pointer"
+        @click="goToDetails"
+      >
+        <img :src="content.thumbNailImage" alt="Banner" class="w-full h-64 object-cover" />
 
-    <div class="p-4 max-w-3xl mx-auto space-y-4">
-      <!-- Subtitle + user -->
-      <div class="flex justify-between items-center">
-        <h2 class="text-xl font-semibold">{{ content?.subTitle }}</h2>
-        <span class="text-sm text-gray-600 dark:text-gray-400">{{ content?.userName }}</span>
+        <div class="p-4 flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <img :src="content.logo" class="h-10 w-10 rounded-full" />
+            <div>
+              <h2 class="font-bold text-gray-900 dark:text-white">{{ content.title }}</h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{{ content.subTitle }}</p>
+            </div>
+          </div>
+          <button class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full hover:bg-blue-700">
+            REFRESH
+          </button>
+        </div>
       </div>
-
-      <!-- Main Image -->
-      <img
-        :src="content?.mainImage"
-        alt="Main visual"
-        class="w-full max-w-md mx-auto rounded shadow-md"
-      />
-
-      <!-- Rendered HTML text -->
-      <div class="prose dark:prose-invert max-w-none" v-html="content?.text"></div>
     </div>
   </div>
 </template>
