@@ -2,6 +2,8 @@
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { useContentStore } from '@/stores/contentStore'
 import { useRouter } from 'vue-router'
+import Button from '@/components/Button.vue'
+import ImageViewer from '@/components/ImageViewer.vue'
 
 const store = useContentStore()
 const router = useRouter()
@@ -94,17 +96,17 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
   >
     <!-- Banner Image with Close -->
     <div class="relative">
-      <img
+      <ImageViewer
         :src="content.thumbNailImage"
         :alt="content.title"
-        class="w-full h-72 sm:h-80 object-cover shadow-md"
+        customClass="w-full h-72 sm:h-80 object-cover shadow-md"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
 
       <!-- Close Button -->
       <button
         @click="closeContent"
-        class="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition"
+        class="absolute cursor-pointer top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition"
         aria-label="Close"
       >
         <svg
@@ -129,10 +131,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
       <!-- Header -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="flex items-center gap-4">
-          <img
+          <ImageViewer
             :src="content.logo"
             :alt="content.subTitle"
-            class="h-12 w-12 rounded-full border-2 border-blue-500 shadow-sm object-cover"
+            customClass="h-12 w-12 rounded-xl border-2 border-blue-500 shadow-sm object-cover"
           />
           <div>
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
@@ -145,10 +147,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
         </div>
 
         <!-- Refresh Button -->
-        <button
-          @click="pickRandom"
-          class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg transition"
-        >
+        <Button :onClick="pickRandom" label="Refresh">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-4 w-4"
@@ -163,16 +162,15 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
             />
           </svg>
-          <span>REFRESH</span>
-        </button>
+        </Button>
       </div>
 
       <!-- Main Image -->
-      <img
+      <ImageViewer
         v-if="content.mainImage"
         :src="content.mainImage"
         :alt="content.title"
-        class="w-full max-w-lg mx-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+        customClass="max-w-lg mx-auto"
       />
 
       <!-- HTML Content -->
@@ -183,12 +181,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
 
       <!-- Image Gallery -->
       <div v-if="content.images.length" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-        <img
+        <ImageViewer
           v-for="(img, index) in content.images"
           :key="index"
           :src="img.src"
           :alt="img.alt"
-          class="w-full rounded-lg shadow-md"
+          customClass="w-full rounded-lg shadow-md"
         />
       </div>
     </div>

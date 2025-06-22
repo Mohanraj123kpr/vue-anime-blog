@@ -2,12 +2,15 @@
 import { computed } from 'vue'
 import { useContentStore } from '@/stores/contentStore'
 import { useRouter } from 'vue-router'
+import Button from '@/components/Button.vue'
+import ContentCard from '@/components/ContentCard.vue'
+import ImageViewer from '@/components/ImageViewer.vue'
 
 const store = useContentStore()
 const router = useRouter()
 
 // Format current date
-const formattedDate = computed(() => {
+const formattedFullDate = computed(() => {
   const date = new Date()
   return date.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -32,64 +35,52 @@ function pickRandom() {
 </script>
 
 <template>
-  <div v-if="store.selectedContent" class="min-h-screen bg-white dark:bg-gray-900">
-    <!-- Header with Date and User Initials -->
-    <div class="flex justify-between items-center px-6 py-4">
-      <div class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-        {{ formattedDate }}
+  <div class="flex justify-between items-center px-6 pt-6">
+    <!-- Date and Heading -->
+    <div>
+      <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+        {{ formattedFullDate }}
       </div>
-      <div
-        class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-bold rounded-full h-9 w-9 flex items-center justify-center shadow-inner"
-      >
-        {{ store.userInitials }}
-      </div>
+      <div class="text-2xl font-bold text-gray-900 dark:text-white">Today</div>
     </div>
 
-    <!-- Main Content Card -->
-    <div class="flex justify-center items-center px-4 py-10">
-      <div
-        class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300 hover:scale-[1.02] cursor-pointer animate-fade-in"
-        @click="goToDetails"
-      >
-        <!-- Banner Image -->
-        <img
-          :src="store.selectedContent.thumbNailImage"
-          alt="Banner"
-          class="w-full h-72 object-cover"
-        />
-
-        <!-- Content Info -->
-        <div class="p-6 space-y-4">
-          <div class="flex justify-between items-center">
-            <!-- Avatar and Titles -->
-            <div class="flex items-center gap-4">
-              <img
-                :src="store.selectedContent.logo"
-                class="h-12 w-12 rounded-full border-2 border-blue-500 shadow-md"
-                alt="Avatar"
-              />
-              <div>
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
-                  {{ store.selectedContent.title }}
-                </h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
-                  {{ store.selectedContent.subTitle }}
-                </p>
-              </div>
-            </div>
-
-            <!-- Refresh Button -->
-            <button
-              @click.stop="pickRandom"
-              class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-1.5 rounded-full shadow-md"
-            >
-              REFRESH
-            </button>
-          </div>
-        </div>
-      </div>
+    <!-- User Initials -->
+    <div
+      class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-bold rounded-full h-9 w-9 flex items-center justify-center shadow-inner"
+    >
+      {{ store.userInitials }}
     </div>
   </div>
-
+  <div v-if="store.selectedContent" class="min-h-screen bg-white dark:bg-gray-900">
+    <!-- Main Content Card -->
+    <div class="flex justify-center items-center px-4 py-10">
+      <ContentCard
+        :title="store.selectedContent.title"
+        :subtitle="store.selectedContent.subTitle"
+        :logo="store.selectedContent.logo"
+        :thumbnail="store.selectedContent.thumbNailImage"
+        :onCardClick="goToDetails"
+      >
+        <template #action>
+          <Button :onClick="pickRandom" label="REFRESH">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+          </Button>
+        </template>
+      </ContentCard>
+    </div>
+  </div>
   <div v-else class="text-center py-20 text-gray-400">No content found. Try refreshing.</div>
 </template>
