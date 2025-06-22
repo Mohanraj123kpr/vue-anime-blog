@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { useContentStore } from '@/stores/contentStore'
 import { useRouter } from 'vue-router'
 
 const store = useContentStore()
 const router = useRouter()
 
+// Computed: extract enhanced HTML content + images
 const content = computed(() => {
   if (!store.selectedContent) return null
 
   const html = store.selectedContent.text || ''
   const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)
   const bodyContent = bodyMatch ? bodyMatch[1] : html
-
-  console.log(store.selectedContent, 'selectedContent')
 
   return {
     ...store.selectedContent,
@@ -22,29 +21,34 @@ const content = computed(() => {
   }
 })
 
+// Bold first 3 words and style images
 function enhanceContent(html: string): string {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(html, 'text/html')
+  try {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, 'text/html')
 
-  // Enhance paragraphs (first 3 words bold)
-  doc.querySelectorAll('p').forEach((p) => {
-    const words = p.textContent?.trim().split(/\s+/) || []
-    if (words.length >= 3) {
-      const boldPart = words.slice(0, 3).join(' ')
-      const rest = words.slice(3).join(' ')
-      p.innerHTML = `<strong class="font-semibold">${boldPart}</strong> ${rest}`
-    }
-  })
+    doc.querySelectorAll('p').forEach((p) => {
+      const words = p.textContent?.trim().split(/\s+/) || []
+      if (words.length >= 3) {
+        const boldPart = words.slice(0, 3).join(' ')
+        const rest = words.slice(3).join(' ')
+        p.innerHTML = `<strong class="font-semibold">${boldPart}</strong> ${rest}`
+      }
+    })
 
-  // Process images
-  doc.querySelectorAll('img').forEach((img) => {
-    img.classList.add('rounded-lg', 'shadow-md', 'my-4', 'mx-auto', 'max-w-full')
-    if (!img.alt) img.alt = store.selectedContent?.title || ''
-  })
+    doc.querySelectorAll('img').forEach((img) => {
+      img.classList.add('rounded-lg', 'shadow-md', 'my-4', 'mx-auto', 'max-w-full')
+      if (!img.alt) img.alt = store.selectedContent?.title || ''
+    })
 
-  return doc.body.innerHTML
+    return doc.body.innerHTML
+  } catch (error) {
+    console.error('Failed to enhance HTML:', error)
+    return html
+  }
 }
 
+// Extract images for preview gallery
 function extractImages(html: string): Array<{ src: string; alt: string }> {
   const imgRegex = /<img[^>]+src="([^">]+)"(?:[^>]+alt="([^">]*)")?[^>]*>/g
   const images = []
@@ -60,21 +64,35 @@ function extractImages(html: string): Array<{ src: string; alt: string }> {
   return images
 }
 
+// Refresh content
 function pickRandom() {
-  store.pickNextContent()
+  try {
+    store.pickNextContent()
+  } catch (err) {
+    console.error('Error while refreshing content:', err)
+  }
 }
 
+// Close detail view
 function closeContent() {
   router.push({ name: 'home' })
 }
+
+// Escape key to close
+function onKeyDown(e: KeyboardEvent) {
+  if (e.key === 'Escape') closeContent()
+}
+
+onMounted(() => window.addEventListener('keydown', onKeyDown))
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
 </script>
 
 <template>
   <div
     v-if="content"
-    class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-x-hidden transition-colors duration-300"
+    class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300"
   >
-    <!-- Thumbnail Banner with gradient overlay -->
+    <!-- Banner Image with Close -->
     <div class="relative">
       <img
         :src="content.thumbNailImage"
@@ -86,7 +104,7 @@ function closeContent() {
       <!-- Close Button -->
       <button
         @click="closeContent"
-        class="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition cursor-pointer"
+        class="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition"
         aria-label="Close"
       >
         <svg
@@ -106,9 +124,9 @@ function closeContent() {
       </button>
     </div>
 
-    <!-- Main Container -->
+    <!-- Main Content Area -->
     <div class="p-6 sm:p-8 max-w-3xl mx-auto space-y-8">
-      <!-- Header Row -->
+      <!-- Header -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="flex items-center gap-4">
           <img
@@ -129,7 +147,7 @@ function closeContent() {
         <!-- Refresh Button -->
         <button
           @click="pickRandom"
-          class="flex items-center cursor-pointer gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg transition-all"
+          class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg transition"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +167,7 @@ function closeContent() {
         </button>
       </div>
 
-      <!-- Main Featured Image -->
+      <!-- Main Image -->
       <img
         v-if="content.mainImage"
         :src="content.mainImage"
@@ -157,13 +175,13 @@ function closeContent() {
         class="w-full max-w-lg mx-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
       />
 
-      <!-- HTML Content Body -->
+      <!-- HTML Content -->
       <div
         class="prose dark:prose-invert max-w-none prose-p:leading-7 prose-p:text-[1.05rem] prose-p:font-sans prose-img:mx-auto prose-img:rounded-lg prose-img:shadow-md"
         v-html="content.text"
       />
 
-      <!-- Additional Images Gallery -->
+      <!-- Image Gallery -->
       <div v-if="content.images.length" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
         <img
           v-for="(img, index) in content.images"
@@ -174,6 +192,10 @@ function closeContent() {
         />
       </div>
     </div>
+  </div>
+
+  <div v-else class="text-center text-gray-400 py-20">
+    Content not available. Please return to home.
   </div>
 </template>
 

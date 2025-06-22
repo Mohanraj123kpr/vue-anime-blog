@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 const store = useContentStore()
 const router = useRouter()
 
-// Dynamic date
+// Format current date
 const formattedDate = computed(() => {
   const date = new Date()
   return date.toLocaleDateString('en-US', {
@@ -16,18 +16,24 @@ const formattedDate = computed(() => {
   })
 })
 
+// Navigate to detail view
 function goToDetails() {
   router.push({ name: 'anime-detail' })
 }
 
+// Pick a random content item
 function pickRandom() {
-  store.pickNextContent()
+  try {
+    store.pickNextContent()
+  } catch (error) {
+    console.error('Failed to pick random content:', error)
+  }
 }
 </script>
 
 <template>
   <div v-if="store.selectedContent" class="min-h-screen bg-white dark:bg-gray-900">
-    <!-- Top Header with Date and User Initials -->
+    <!-- Header with Date and User Initials -->
     <div class="flex justify-between items-center px-6 py-4">
       <div class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
         {{ formattedDate }}
@@ -52,10 +58,10 @@ function pickRandom() {
           class="w-full h-72 object-cover"
         />
 
-        <!-- Details Section -->
+        <!-- Content Info -->
         <div class="p-6 space-y-4">
-          <!-- Title & Avatar Row -->
           <div class="flex justify-between items-center">
+            <!-- Avatar and Titles -->
             <div class="flex items-center gap-4">
               <img
                 :src="store.selectedContent.logo"
@@ -75,7 +81,7 @@ function pickRandom() {
             <!-- Refresh Button -->
             <button
               @click.stop="pickRandom"
-              class="bg-gradient-to-r cursor-pointer from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-1.5 rounded-full shadow-md transition-colors duration-200"
+              class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-1.5 rounded-full shadow-md"
             >
               REFRESH
             </button>
@@ -84,4 +90,6 @@ function pickRandom() {
       </div>
     </div>
   </div>
+
+  <div v-else class="text-center py-20 text-gray-400">No content found. Try refreshing.</div>
 </template>
