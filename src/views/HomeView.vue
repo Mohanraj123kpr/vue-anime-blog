@@ -75,7 +75,7 @@ function pickRandom() {
             <!-- Refresh Button -->
             <button
               @click.stop="pickRandom"
-              class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-1.5 rounded-full shadow-md transition-colors duration-200"
+              class="bg-gradient-to-r cursor-pointer from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-1.5 rounded-full shadow-md transition-colors duration-200"
             >
               REFRESH
             </button>

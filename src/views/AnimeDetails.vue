@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useContentStore } from '@/stores/contentStore'
+import { useRouter } from 'vue-router'
 
 const store = useContentStore()
+const router = useRouter()
 
 const content = computed(() => {
   if (!store.selectedContent) return null
@@ -61,6 +63,10 @@ function extractImages(html: string): Array<{ src: string; alt: string }> {
 function pickRandom() {
   store.pickNextContent()
 }
+
+function closeContent() {
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -76,6 +82,28 @@ function pickRandom() {
         class="w-full h-72 sm:h-80 object-cover shadow-md"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
+
+      <!-- Close Button -->
+      <button
+        @click="closeContent"
+        class="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition cursor-pointer"
+        aria-label="Close"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
     </div>
 
     <!-- Main Container -->
@@ -101,7 +129,7 @@ function pickRandom() {
         <!-- Refresh Button -->
         <button
           @click="pickRandom"
-          class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg transition-all"
+          class="flex items-center cursor-pointer gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg transition-all"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
