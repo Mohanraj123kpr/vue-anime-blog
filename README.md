@@ -1,48 +1,51 @@
 📘 AnimeVerse — Vue 3 Anime Content Viewer
-A sleek, component-driven Anime content viewer built using Vue 3, Pinia, TailwindCSS, and Vitest. It supports user based anime content and clean UI transitions.
+
+    A sleek, component-driven Anime content viewer built using Vue 3, Pinia, TailwindCSS, and Vitest. It supports user based anime content and clean UI transitions.
 
 🖼️ Features
 
-🔥 Vue 3 + <script setup> composition API
+    🔥 Vue 3 + <script setup> composition API
 
-🗂️ Pinia store for managing anime content
+    🗂️ Pinia store for managing anime content
 
-🧑 User avatar with dropdown actions
+    🧑 User avatar with dropdown actions
 
-🎨 Fully responsive with TailwindCSS
+    🎨 Fully responsive with TailwindCSS
 
-✅ Unit tested with Vitest + Vue Test Utils
+    ✅ Unit tested with Vitest + Vue Test Utils
 
-🌒 Dark mode support
+    🌒 Dark mode support
 
-✨ Component-driven architecture
+    ✨ Component-driven architecture
 
 🚀 Getting Started
 
-1. Install dependencies
+    1. Install dependencies
 
-npm install
+    npm install
 
-2. Run the app
+    2. Run the app
 
-npm run dev
+    npm run dev
 
 🧪 Running Unit Tests
-This project uses Vitest + Vue Test Utils:
+
+    This project uses Vitest + Vue Test Utils:
 
 # Run all tests
 
-npx vitest
+    npx vitest
 
 🔧 Tech Stack
-Vue 3
 
-Pinia
+    Vue 3
 
-TailwindCSS
+    Pinia
 
-Vue Router
+    TailwindCSS
 
-Vitest
+    Vue Router
 
-Vue Test Utils
+    Vitest
+
+    Vue Test Utils
