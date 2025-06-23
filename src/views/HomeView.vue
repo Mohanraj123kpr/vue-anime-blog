@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router'
 import Button from '@/components/Button.vue'
 import ContentCard from '@/components/ContentCard.vue'
 import userAvatar from '@/components/UserAvatar.vue'
-import { clearToken } from '@/services/api'
 
 const store = useContentStore()
 const router = useRouter()

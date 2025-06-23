@@ -11,7 +11,7 @@ const router = useRouter()
 // Computed: extract enhanced HTML content + images
 const content = computed(() => {
   if (!store.selectedContent) return null
-
+  // Extract body content from HTML
   const html = store.selectedContent.text || ''
   const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)
   const bodyContent = bodyMatch ? bodyMatch[1] : html
@@ -38,6 +38,7 @@ const enhanceContent = (html: string): string => {
       }
     })
 
+    // Style images and set alt text
     doc.querySelectorAll('img').forEach((img) => {
       img.classList.add('rounded-lg', 'shadow-md', 'my-4', 'mx-auto', 'max-w-full')
       if (!img.alt) img.alt = store.selectedContent?.title || ''
@@ -52,10 +53,12 @@ const enhanceContent = (html: string): string => {
 
 // Extract images for preview gallery
 const extractImages = (html: string): Array<{ src: string; alt: string }> => {
+  // Regex to find <img> tags and extract src and alt attributes
   const imgRegex = /<img[^>]+src="([^">]+)"(?:[^>]+alt="([^">]*)")?[^>]*>/g
   const images = []
   let match
 
+  // Loop through all matches
   while ((match = imgRegex.exec(html)) !== null) {
     images.push({
       src: match[1],
@@ -63,6 +66,7 @@ const extractImages = (html: string): Array<{ src: string; alt: string }> => {
     })
   }
 
+  // If no images found, return empty array
   return images
 }
 
@@ -85,6 +89,7 @@ const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') closeContent()
 }
 
+// Lifecycle hooks for keydown event
 onMounted(() => window.addEventListener('keydown', onKeyDown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
 </script>

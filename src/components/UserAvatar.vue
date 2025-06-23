@@ -72,7 +72,6 @@ onClickOutside(avatarRef, () => {
 </template>
 
 <style scoped>
-/* Optional: Smooth transition */
 .card-enter-active,
 .card-leave-active {
   transition: opacity 0.2s ease;

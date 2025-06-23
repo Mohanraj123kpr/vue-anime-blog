@@ -3,7 +3,9 @@ import { defineStore } from 'pinia'
 import { authUser } from '@/services/api'
 
 export const useContentStore = defineStore('counter', () => {
+  // Reactive reference to the current index of the anime list
   const currentIndex = ref(0)
+  // Sample anime list with HTML content
   const animeList = ref<any[]>([
     {
       id: 3,
@@ -38,15 +40,17 @@ export const useContentStore = defineStore('counter', () => {
       title: 'One Piece',
     },
   ])
-  const selectedContent = ref(animeList.value[0]) // default
+  const selectedContent = ref(animeList.value[0]) //By default selectedContent is the first item
 
-  function pickNextContent() {
+  // Computed property to get the current content based on index
+  const pickNextContent = () => {
     if (animeList.value.length === 0) return
 
     currentIndex.value = (currentIndex.value + 1) % animeList.value.length
     selectedContent.value = animeList.value[currentIndex.value]
   }
 
+  // Function to authenticate user and set the token
   const login = (email: string) => {
     authUser(email)
   }
