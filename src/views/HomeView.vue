@@ -21,15 +21,16 @@ const formattedFullDate = computed(() => {
 })
 
 // Navigate to detail view
-function goToDetails() {
+const goToDetails = () => {
   router.push({ name: 'anime-detail' })
 }
 
+// Handle user logout
 const handleLogout = () => {
   router.push({ name: 'login' })
 }
 // Pick a random content item
-function pickRandom() {
+const pickRandom = () => {
   try {
     store.pickNextContent()
   } catch (error) {

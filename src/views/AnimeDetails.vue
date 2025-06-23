@@ -24,7 +24,7 @@ const content = computed(() => {
 })
 
 // Bold first 3 words and style images
-function enhanceContent(html: string): string {
+const enhanceContent = (html: string): string => {
   try {
     const parser = new DOMParser()
     const doc = parser.parseFromString(html, 'text/html')
@@ -51,7 +51,7 @@ function enhanceContent(html: string): string {
 }
 
 // Extract images for preview gallery
-function extractImages(html: string): Array<{ src: string; alt: string }> {
+const extractImages = (html: string): Array<{ src: string; alt: string }> => {
   const imgRegex = /<img[^>]+src="([^">]+)"(?:[^>]+alt="([^">]*)")?[^>]*>/g
   const images = []
   let match
@@ -67,7 +67,7 @@ function extractImages(html: string): Array<{ src: string; alt: string }> {
 }
 
 // Refresh content
-function pickRandom() {
+const pickRandom = () => {
   try {
     store.pickNextContent()
   } catch (err) {
@@ -76,12 +76,12 @@ function pickRandom() {
 }
 
 // Close detail view
-function closeContent() {
+const closeContent = () => {
   router.push({ name: 'home' })
 }
 
 // Escape key to close
-function onKeyDown(e: KeyboardEvent) {
+const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') closeContent()
 }
 
