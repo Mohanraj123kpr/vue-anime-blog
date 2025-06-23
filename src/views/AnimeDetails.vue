@@ -178,7 +178,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
           v-if="content.mainImage"
           :src="content.mainImage"
           :alt="content.title"
-          customClass="w-full max-w-lg mx-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+          customClass="w-full max-h-[400px] max-w-lg mx-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
         />
       </div>
 
