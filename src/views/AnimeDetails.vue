@@ -173,12 +173,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
       </div>
 
       <!-- Main Image -->
-      <ImageViewer
-        v-if="content.mainImage"
-        :src="content.mainImage"
-        :alt="content.title"
-        customClass="w-full max-w-lg mx-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-      />
+      <div class="flex justify-center">
+        <ImageViewer
+          v-if="content.mainImage"
+          :src="content.mainImage"
+          :alt="content.title"
+          customClass="w-full max-w-lg mx-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+        />
+      </div>
 
       <!-- HTML Content -->
       <div
