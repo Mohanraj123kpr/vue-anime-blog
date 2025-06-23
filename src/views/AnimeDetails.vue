@@ -99,14 +99,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
       <ImageViewer
         :src="content.thumbNailImage"
         :alt="content.title"
-        customClass="w-full h-72 sm:h-80 object-cover shadow-md"
+        customClass="w-full h-60 sm:h-72 md:h-80 object-cover shadow-md"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
 
       <!-- Close Button -->
       <button
         @click="closeContent"
-        class="absolute cursor-pointer top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition"
+        class="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition"
         aria-label="Close"
       >
         <svg
@@ -127,20 +127,22 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
     </div>
 
     <!-- Main Content Area -->
-    <div class="p-6 sm:p-8 max-w-3xl mx-auto space-y-8">
+    <div class="p-4 sm:p-6 md:p-8 max-w-3xl mx-auto space-y-8">
       <!-- Header -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 w-full sm:w-auto">
           <ImageViewer
             :src="content.logo"
             :alt="content.subTitle"
-            customClass="h-12 w-12 rounded-xl border-2 border-blue-500 shadow-sm object-cover"
+            customClass="h-10 w-10 sm:h-12 sm:w-12 rounded-xl border-2 border-blue-500 shadow-sm object-cover"
           />
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
+          <div class="truncate">
+            <h1
+              class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-tight truncate"
+            >
               {{ content.title }}
             </h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">
+            <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400 truncate">
               {{ content.subTitle }}
             </p>
           </div>
@@ -170,12 +172,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
         v-if="content.mainImage"
         :src="content.mainImage"
         :alt="content.title"
-        customClass="max-w-lg mx-auto"
+        customClass="w-full max-w-lg mx-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
       />
 
       <!-- HTML Content -->
       <div
-        class="prose dark:prose-invert max-w-none prose-p:leading-7 prose-p:text-[1.05rem] prose-p:font-sans prose-img:mx-auto prose-img:rounded-lg prose-img:shadow-md"
+        class="prose dark:prose-invert max-w-none prose-p:leading-relaxed prose-p:text-[1rem] sm:prose-p:text-[1.05rem] prose-img:mx-auto prose-img:rounded-lg prose-img:shadow-md"
         v-html="content.text"
       />
 

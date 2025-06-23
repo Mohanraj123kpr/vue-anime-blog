@@ -31,3 +31,8 @@ export const fetchContent = async () => {
     },
   })
 }
+
+export const clearToken = () => {
+  token = ''
+  console.log('Logged out successfully')
+}

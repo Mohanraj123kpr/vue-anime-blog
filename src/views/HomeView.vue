@@ -4,7 +4,8 @@ import { useContentStore } from '@/stores/contentStore'
 import { useRouter } from 'vue-router'
 import Button from '@/components/Button.vue'
 import ContentCard from '@/components/ContentCard.vue'
-import ImageViewer from '@/components/ImageViewer.vue'
+import userAvatar from '@/components/userAvatar.vue'
+import { clearToken } from '@/services/api'
 
 const store = useContentStore()
 const router = useRouter()
@@ -24,6 +25,9 @@ function goToDetails() {
   router.push({ name: 'anime-detail' })
 }
 
+const handleLogout = () => {
+  router.push({ name: 'login' })
+}
 // Pick a random content item
 function pickRandom() {
   try {
@@ -33,27 +37,33 @@ function pickRandom() {
   }
 }
 </script>
-
 <template>
-  <div class="flex justify-between items-center px-6 pt-6">
-    <!-- Date and Heading -->
-    <div>
-      <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-        {{ formattedFullDate }}
+  <div class="min-h-screen bg-white dark:bg-gray-900">
+    <!-- Header with Date and User Initials -->
+    <div class="flex justify-between items-center px-4 sm:px-6 pt-6">
+      <!-- Date and Heading -->
+      <div>
+        <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+          {{ formattedFullDate }}
+        </div>
+        <div class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">Today</div>
       </div>
-      <div class="text-2xl font-bold text-gray-900 dark:text-white">Today</div>
+
+      <!-- User Avatar -->
+      <div class="flex items-center">
+        <userAvatar
+          :userName="store.selectedContent.userName"
+          userAction="Logout"
+          @userActionClick="handleLogout"
+        />
+      </div>
     </div>
 
-    <!-- User Initials -->
-    <div
-      class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-bold rounded-full h-9 w-9 flex items-center justify-center shadow-inner"
-    >
-      {{ store.userInitials }}
-    </div>
-  </div>
-  <div v-if="store.selectedContent" class="min-h-screen bg-white dark:bg-gray-900">
     <!-- Main Content Card -->
-    <div class="flex justify-center items-center px-4 py-10">
+    <div
+      v-if="store.selectedContent"
+      class="flex justify-center items-center px-4 sm:px-6 py-8 sm:py-10"
+    >
       <ContentCard
         :title="store.selectedContent.title"
         :subtitle="store.selectedContent.subTitle"
@@ -81,6 +91,10 @@ function pickRandom() {
         </template>
       </ContentCard>
     </div>
+
+    <!-- Fallback -->
+    <div v-else class="text-center py-20 text-gray-400 text-sm">
+      No content found. Try refreshing.
+    </div>
   </div>
-  <div v-else class="text-center py-20 text-gray-400">No content found. Try refreshing.</div>
 </template>

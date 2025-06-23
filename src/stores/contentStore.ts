@@ -47,24 +47,14 @@ export const useContentStore = defineStore('counter', () => {
     selectedContent.value = animeList.value[currentIndex.value]
   }
 
-  function login(email: string) {
+  const login = (email: string) => {
     authUser(email)
   }
-
-  const userInitials = computed(() => {
-    if (!selectedContent.value?.userName) return ''
-    return selectedContent.value.userName
-      .split(' ')
-      .map((word: string) => word[0])
-      .join('')
-      .toUpperCase()
-  })
 
   return {
     animeList,
     selectedContent,
     pickNextContent,
-    userInitials,
     login,
   }
 })
