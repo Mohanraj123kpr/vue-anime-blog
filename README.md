@@ -36,6 +36,8 @@
 
     npx vitest
 
+    npx vitest --ui # for visual runner
+
 🔧 Tech Stack
 
     Vue 3
